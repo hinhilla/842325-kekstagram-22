@@ -1416,3 +1416,6 @@ main {
 .hidden {
   display: none;
 }
+.error-validity {
+  border: 3px solid red;
+}
