@@ -1,9 +1,22 @@
 
 import { pageBody } from './show-full.js';
+import { randomArray } from './show.js';
 
 const formBlock = pageBody.querySelector('.img-upload__form');
 const textHashtags = formBlock.querySelector('.text__hashtags');
-// const textDescription = formBlock.querySelector('.text__description');
+const commentField = formBlock.querySelector('.text__description');
+const MAX_COMMENT_LENGHT = 140;
+const ERROR_CLASS = 'error-validity';
+const ERROR_MESSAGES = {
+  start: 'хэштег должен начинаться с #',
+  minLength: 'хэштег слишком короткий',
+  maxLength: 'хэштег слишком длинный',
+  maxNumberOfHashtags: 'хэштегов может быть не больше пяти',
+  unic: 'хештеги не могут повторяться',
+  onlyNumbersAndLetters: 'в хэштеге могут быть только буквы и числа',
+  commentLength: 'комментарий слишком длинный'
+};
+
 
 textHashtags.addEventListener('input', () => {
   const hashtagsArray = textHashtags.value.split(' ');
@@ -19,43 +32,89 @@ textHashtags.addEventListener('input', () => {
     return string.length > 20;
   }
 
-  if (!hashtagsArray.every(isHashtag)) {
-    textHashtags.setCustomValidity('хэштег должен начинаться с #');
-    textHashtags.classList.add('error-validity');
-  } else if (hashtagsArray.some(isTooShort)) {
-    textHashtags.setCustomValidity('введите хотя бы один символ');
-    textHashtags.classList.add('error-validity');
-  } else if (hashtagsArray.some(isTooLong)) {
-    textHashtags.setCustomValidity('хэштег слишком длинный');
-    textHashtags.classList.add('error-validity');
-  } else if (hashtagsArray.length > 5) {
-    textHashtags.setCustomValidity('хэштегов может быть не больше пяти');
-    textHashtags.classList.add('error-validity');
-  } else {
-    const isNumberOrLetter = (simbol) => simbol.match(/[a-z0-9A-Zа-яА-Я]/);
-    hashtagsArray.every((elementArray) => {
-      let hashtag = elementArray.split('');
-      return hashtag.every((element, index) => {
-        if ((index !== 0) && (isNumberOrLetter(element) == null)) {
-          textHashtags.setCustomValidity('в хэштеге могут быть только буквы и числа');
-          textHashtags.classList.add('error-validity');
+  const firstSimbolInvalid = !hashtagsArray.every(isHashtag);
+  const minLengthInvalid = hashtagsArray.some(isTooShort);
+  const maxLengthInvalid = hashtagsArray.some(isTooLong);
+  const maxNumberOfHashtags = hashtagsArray.length > 5;
+  const isNumberOrLetter = (simbol) => simbol.match(/[a-z0-9A-Zа-яА-Я]/);
+  let lowerCaseArray = [];
 
-          return false;
+  switch (true) {
+    case (firstSimbolInvalid):
+      textHashtags.setCustomValidity(ERROR_MESSAGES.start);
+      textHashtags.classList.add(ERROR_CLASS);
+      break;
+    case (minLengthInvalid):
+      textHashtags.setCustomValidity(ERROR_MESSAGES.minLength);
+      textHashtags.classList.add(ERROR_CLASS);
+      break;
+    case (maxLengthInvalid):
+      textHashtags.setCustomValidity(ERROR_MESSAGES.maxLength);
+      textHashtags.classList.add(ERROR_CLASS);
+      break;
+    case (maxNumberOfHashtags):
+      textHashtags.setCustomValidity(ERROR_MESSAGES.maxNumberOfHashtags);
+      textHashtags.classList.add(ERROR_CLASS);
+      break;
+    default:
+      hashtagsArray.every((elementArray) => {
+        let abc = elementArray.toLowerCase();
+        lowerCaseArray.push(abc);
+        let hashtag = abc.split('');
+        if (isArrayElementUnic(lowerCaseArray) == false) {
+          textHashtags.setCustomValidity(ERROR_MESSAGES.unic);
+          textHashtags.classList.add(ERROR_CLASS);
         } else {
           textHashtags.setCustomValidity('');
-          textHashtags.classList.remove('error-validity');
-          return true;
+          textHashtags.classList.remove(ERROR_CLASS);
         }
+        return hashtag.every((element, index) => {
+          if ((index !== 0) && (isNumberOrLetter(element) == null)) {
+            textHashtags.setCustomValidity(ERROR_MESSAGES.onlyNumbersAndLetters);
+            textHashtags.classList.add(ERROR_CLASS);
+            return false;
+          } else {
+            textHashtags.setCustomValidity('');
+            textHashtags.classList.remove(ERROR_CLASS);
+            return true;
+          }
+        });
       });
-    });
-
   }
   textHashtags.reportValidity();
-
 });
-// const array = ["a", "b", "a", "a"];
-// array.every((currentElementArray, currentIndex) => {
-//   console.log(currentElementArray);
-//   console.log(array[currentIndex + 1]);
-//   return console.log(currentElementArray !== array[currentIndex + 1]);
-// })
+const isArrayElementUnic = (array) => {
+  for (let i = 0; i < array.length - 1; i++) {
+    for (let j = i + 1; j < array.length; j++) {
+      if (array[i] === array[j]) {
+        return false;
+      }
+    }
+  }
+}
+
+
+textHashtags.addEventListener('focus', () => {
+  return textHashtags.addEventListener('keydown', (evt) => {
+    if (evt.keyCode == 27) {
+      evt.stopPropagation();
+      return;
+    }
+  });
+})
+
+commentField.addEventListener('input', () => {
+  if (commentField.value.length >= MAX_COMMENT_LENGHT) {
+    commentField.classList.add(ERROR_CLASS);
+    commentField.setCustomValidity(ERROR_MESSAGES.commentLength);
+
+  }
+})
+commentField.addEventListener('focus', () => {
+  return commentField.addEventListener('keydown', (evt) => {
+    if (evt.keyCode == 27) {
+      evt.stopPropagation();
+      return;
+    }
+  });
+})

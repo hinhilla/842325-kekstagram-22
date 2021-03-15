@@ -23,6 +23,7 @@ closeEditForm.addEventListener('click', () => {
 
 document.addEventListener('keydown', (evt) => {
   if (evt.keyCode !== 27) {
+
     return;
   } else {
     closeModal(editImageForm, pageBody, HIDDEN_STATE, OPEN_MODAL_STATE);
