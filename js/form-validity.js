@@ -12,16 +12,14 @@ const ERROR_MESSAGES = {
   minLength: 'хэштег слишком короткий',
   maxLength: 'хэштег слишком длинный',
   maxNumberOfHashtags: 'хэштегов может быть не больше пяти',
-  unic: 'хештеги не могут повторяться',
   onlyNumbersAndLetters: 'в хэштеге могут быть только буквы и числа',
-  commentLength: 'комментарий слишком длинный'
+  commentLength: 'комментарий слишком длинный',
+  notUnic: 'хэштеги не могут повторяться'
 };
-
-
+const isNumberOrLetter = (simbol) => simbol.match(/[\w]/);
 textHashtags.addEventListener('input', () => {
   const hashtagsArray = textHashtags.value.split(' ');
-
-
+  textHashtags.value = textHashtags.value.replace(/\s+/g, ' ');
   const isHashtag = (string) => {
     return ((string[0] === '#') || (string == ''));
   }
@@ -31,14 +29,12 @@ textHashtags.addEventListener('input', () => {
   const isTooLong = (string) => {
     return string.length > 20;
   }
-
   const firstSimbolInvalid = !hashtagsArray.every(isHashtag);
   const minLengthInvalid = hashtagsArray.some(isTooShort);
   const maxLengthInvalid = hashtagsArray.some(isTooLong);
   const maxNumberOfHashtags = hashtagsArray.length > 5;
-  const isNumberOrLetter = (simbol) => simbol.match(/[a-z0-9A-Zа-яА-Я]/);
-  let lowerCaseArray = [];
-
+  const NumberOrLetter = getNumberOrLetterValue(hashtagsArray);
+  const notUnicArray = !getUnicArray(hashtagsArray);
   switch (true) {
     case (firstSimbolInvalid):
       textHashtags.setCustomValidity(ERROR_MESSAGES.start);
@@ -56,43 +52,46 @@ textHashtags.addEventListener('input', () => {
       textHashtags.setCustomValidity(ERROR_MESSAGES.maxNumberOfHashtags);
       textHashtags.classList.add(ERROR_CLASS);
       break;
+    case (notUnicArray):
+      textHashtags.setCustomValidity(ERROR_MESSAGES.notUnic);
+      textHashtags.classList.add(ERROR_CLASS);
+      break;
+    case (!NumberOrLetter):
+      textHashtags.setCustomValidity(ERROR_MESSAGES.onlyNumbersAndLetters);
+      textHashtags.classList.add(ERROR_CLASS);
+      break;
     default:
-      hashtagsArray.every((elementArray) => {
-        let abc = elementArray.toLowerCase();
-        lowerCaseArray.push(abc);
-        let hashtag = abc.split('');
-        if (isArrayElementUnic(lowerCaseArray) == false) {
-          textHashtags.setCustomValidity(ERROR_MESSAGES.unic);
-          textHashtags.classList.add(ERROR_CLASS);
-        } else {
-          textHashtags.setCustomValidity('');
-          textHashtags.classList.remove(ERROR_CLASS);
-        }
-        return hashtag.every((element, index) => {
-          if ((index !== 0) && (isNumberOrLetter(element) == null)) {
-            textHashtags.setCustomValidity(ERROR_MESSAGES.onlyNumbersAndLetters);
-            textHashtags.classList.add(ERROR_CLASS);
-            return false;
-          } else {
-            textHashtags.setCustomValidity('');
-            textHashtags.classList.remove(ERROR_CLASS);
-            return true;
-          }
-        });
-      });
+      textHashtags.setCustomValidity('');
+      textHashtags.classList.remove(ERROR_CLASS);
   }
   textHashtags.reportValidity();
 });
-const isArrayElementUnic = (array) => {
-  for (let i = 0; i < array.length - 1; i++) {
-    for (let j = i + 1; j < array.length; j++) {
-      if (array[i] === array[j]) {
-        return false;
-      }
-    }
+const getUnicArray = (array) => {
+  let lowerCaseArray = [];
+  array.every((currentValue) => {
+    lowerCaseArray.push(currentValue.toLowerCase());
+    return true;
+  })
+  const unicArray = new Set(lowerCaseArray);
+  if (unicArray.size === lowerCaseArray.length) {
+    return true;
+  } else {
+    return false;
   }
 }
 
+const getNumberOrLetterValue = (array) => {
+  return array.every((currentValue) => {
+    let hashtag = currentValue.split('');
+    return hashtag.every((currentValue, index) => {
+      if ((index == 0) || (isNumberOrLetter(currentValue) !== null)) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+  });
+}
 
 textHashtags.addEventListener('focus', () => {
   return textHashtags.addEventListener('keydown', (evt) => {
@@ -102,12 +101,13 @@ textHashtags.addEventListener('focus', () => {
     }
   });
 })
-
 commentField.addEventListener('input', () => {
   if (commentField.value.length >= MAX_COMMENT_LENGHT) {
     commentField.classList.add(ERROR_CLASS);
     commentField.setCustomValidity(ERROR_MESSAGES.commentLength);
-
+  } else {
+    commentField.classList.remove(ERROR_CLASS);
+    commentField.setCustomValidity('');
   }
 })
 commentField.addEventListener('focus', () => {
