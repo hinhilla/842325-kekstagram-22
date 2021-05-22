@@ -23,12 +23,10 @@ closeEditForm.addEventListener('click', () => {
 
 document.addEventListener('keydown', (evt) => {
   if (evt.keyCode !== 27) {
-
     return;
-  } else {
-    closeModal(editImageForm, pageBody, HIDDEN_STATE, OPEN_MODAL_STATE);
-    newImageControl.value = '';
   }
+  closeModal(editImageForm, pageBody, HIDDEN_STATE, OPEN_MODAL_STATE);
+  newImageControl.value = '';
 });
 // а почему так лучше, а не как было?
 

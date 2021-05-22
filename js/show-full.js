@@ -1,10 +1,11 @@
 
 import { pictures as currentPictures } from './show.js';
-import { randomArray as randomPhotoList } from './show.js';
+// import { randomArray as randomPhotoList } from './show.js';
 import { closeModal, openModal } from './util.js';
+import { HIDDEN_STATE, OPEN_MODAL_STATE } from './contstants.js';
 
-const HIDDEN_STATE = 'hidden';
-const OPEN_MODAL_STATE = 'modal-open';
+
+
 
 const pageBody = document.body;
 const bigPictureBlock = pageBody.querySelector('.big-picture');
@@ -18,49 +19,54 @@ const bigPictureCommentsItem = bigPictureCommentsList.querySelector('li');
 const bigPictureDescription = bigPictureBlock.querySelector('.social__caption');
 const commentCount = bigPictureBlock.querySelector('.social__comment-count');
 const newPicturesButton = bigPictureBlock.querySelector('.comments-loader');
-const currentPicturesList = currentPictures.querySelectorAll('.picture');
 const listFragment = document.createDocumentFragment();
 
-currentPicturesList.forEach((currentPicture, index) => {
-  currentPicture.addEventListener('click', () => {
-    openModal(bigPictureBlock, pageBody, HIDDEN_STATE, OPEN_MODAL_STATE);
+
+const getBigPictureInfo = (array) => {
+  const currentPicturesList = currentPictures.querySelectorAll('.picture');
+  currentPicturesList.forEach((currentPicture, index) => {
+    currentPicture.addEventListener('click', () => {
 
 
-    commentCount.classList.add(HIDDEN_STATE);
-    newPicturesButton.classList.add(HIDDEN_STATE);
+      openModal(bigPictureBlock, pageBody, HIDDEN_STATE, OPEN_MODAL_STATE);
 
-    const currentImg = currentPicture.querySelector('.picture__img');
-    const currentLike = currentPicture.querySelector('.picture__likes');
-    const currentCommentsCount = currentPicture.querySelector('.picture__comments');
 
-    bigPicture.alt = currentImg.alt;
-    bigPicture.src = currentImg.src;
-    bigPictureLike.textContent = currentLike.textContent;
-    bigPictureCommentsCount.textContent = currentCommentsCount.textContent;
-    bigPictureDescription.textContent = randomPhotoList[index].description;
+      commentCount.classList.add(HIDDEN_STATE);
+      newPicturesButton.classList.add(HIDDEN_STATE);
 
-    getAllComments(index);
-  });
-})
+      const currentImg = currentPicture.querySelector('.picture__img');
+      const currentLike = currentPicture.querySelector('.picture__likes');
+      const currentCommentsCount = currentPicture.querySelector('.picture__comments');
 
-const getAllComments = (currentElement) => {
-  const commentsList = randomPhotoList[currentElement].comments;
-  bigPictureCommentsList.innerHTML = '';
-  commentsList.forEach((element) => {
-    const currentComment = bigPictureCommentsItem.cloneNode(true);
-    const currentCommentImg = currentComment.querySelector('.social__picture');
-    const currentCommentText = currentComment.querySelector('.social__text');
-    const commentMessage = element.message.join(' ');
+      bigPicture.alt = currentImg.alt;
+      bigPicture.src = currentImg.src;
+      bigPictureLike.textContent = currentLike.textContent;
+      bigPictureCommentsCount.textContent = currentCommentsCount.textContent;
+      bigPictureDescription.textContent = array[index].description;
 
-    currentCommentImg.src = element.avatar;
-    currentCommentImg.alt = element.name;
-    currentCommentText.textContent = commentMessage;
+      getAllComments(index);
+    });
+  })
 
-    listFragment.appendChild(currentComment);
-  });
-  bigPictureCommentsList.appendChild(listFragment);
+  const getAllComments = (currentElement) => {
+    const commentsList = array[currentElement].comments;
+    bigPictureCommentsList.innerHTML = '';
+    commentsList.forEach((element) => {
+      const currentComment = bigPictureCommentsItem.cloneNode(true);
+      const currentCommentImg = currentComment.querySelector('.social__picture');
+      const currentCommentText = currentComment.querySelector('.social__text');
+      // const commentMessage = element.message.join(' ');
+      const commentMessage = element.message;
+
+      currentCommentImg.src = element.avatar;
+      currentCommentImg.alt = element.name;
+      currentCommentText.textContent = commentMessage;
+
+      listFragment.appendChild(currentComment);
+    });
+    bigPictureCommentsList.appendChild(listFragment);
+  }
 }
-
 
 bigPictureCloseButton.addEventListener('click', () => {
   closeModal(bigPictureBlock, pageBody, HIDDEN_STATE, OPEN_MODAL_STATE);
@@ -74,10 +80,7 @@ document.addEventListener('keydown', (evt) => {
 
 
 export { HIDDEN_STATE };
-
-
 export { pageBody };
 export { OPEN_MODAL_STATE };
-
-
+export { getBigPictureInfo };
 
