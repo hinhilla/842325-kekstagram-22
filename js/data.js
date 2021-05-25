@@ -39,6 +39,8 @@ const getRandomDescriptionPhoto = (k, generateUnicId = generateUnicNumbers(), ge
   };
 };
 
+
+
 const descriptionPhotoList = generateArayWithInfo(INITIAL_COUNT, (_, k) => getRandomDescriptionPhoto(k));
 
 export { descriptionPhotoList };

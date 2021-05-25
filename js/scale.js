@@ -1,4 +1,4 @@
-import { radioListBlock, pageBody, previewImage } from './uploadForm.js';
+import { radioListBlock, pageBody, previewImage } from './upload-form.js';
 
 const sliderElement = pageBody.querySelector('.effect-level__slider');
 const sliderValue = pageBody.querySelector('.effect-level__value');
