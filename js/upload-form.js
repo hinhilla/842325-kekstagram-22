@@ -28,7 +28,6 @@ document.addEventListener('keydown', (evt) => {
   closeModal(editImageForm, pageBody, HIDDEN_STATE, OPEN_MODAL_STATE);
   newImageControl.value = '';
 });
-// а почему так лучше, а не как было?
 
 const changeNumberToValueOnClick = (changeNumberTo, min, max, button) => {
   button.addEventListener('click', () => {

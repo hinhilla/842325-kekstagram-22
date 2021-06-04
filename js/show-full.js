@@ -1,6 +1,5 @@
 
 import { pictures as currentPictures } from './show.js';
-// import { randomArray as randomPhotoList } from './show.js';
 import { closeModal, openModal } from './util.js';
 import { HIDDEN_STATE, OPEN_MODAL_STATE } from './contstants.js';
 
@@ -55,7 +54,6 @@ const getBigPictureInfo = (array) => {
       const currentComment = bigPictureCommentsItem.cloneNode(true);
       const currentCommentImg = currentComment.querySelector('.social__picture');
       const currentCommentText = currentComment.querySelector('.social__text');
-      // const commentMessage = element.message.join(' ');
       const commentMessage = element.message;
 
       currentCommentImg.src = element.avatar;
