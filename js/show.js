@@ -24,10 +24,9 @@ const addHtmlCard = (current, randomArray) => {
 
 
 
-const foo = (randomArray) => {
+const addCardOnPage = (randomArray) => {
   const listFragment = document.createDocumentFragment();
   randomArray.forEach((_, index) => listFragment.appendChild(addHtmlCard(index, randomArray)));
   pictures.appendChild(listFragment);
 }
-export { foo };
-export { pictures };
+export { addCardOnPage, pictures };
