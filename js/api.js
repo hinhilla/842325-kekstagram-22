@@ -26,19 +26,24 @@ fetch(URL)
       console.log(arrayRandom);
       removeCardsFromPage();
       addCardOnPage(arrayRandom);
+      getBigPictureInfo(arrayRandom);
     };
     filterRandom.addEventListener(('click'), (_.debounce(renderRandomPhotos, RERENDER_DELAY)));
+
     const renderDiscussedPhotos = () => {
       const arrayDiscussed = photos.slice();
       arrayDiscussed.sort(compareFunction).slice;
       console.log(arrayDiscussed);
       removeCardsFromPage();
       addCardOnPage(arrayDiscussed);
+      getBigPictureInfo(arrayDiscussed);
     };
     filterDiscussed.addEventListener(('click'), (_.debounce(renderDiscussedPhotos, RERENDER_DELAY)));
+
     const renderDefaultPhotos = () => {
       removeCardsFromPage();
       addCardOnPage(photos);
+      getBigPictureInfo(photos);
     };
     filterDefault.addEventListener(('click'), (_.debounce(renderDefaultPhotos, RERENDER_DELAY)));
   })
