@@ -25,8 +25,20 @@ const addHtmlCard = (current, randomArray) => {
 
 
 const addCardOnPage = (randomArray) => {
-  const listFragment = document.createDocumentFragment();
-  randomArray.forEach((_, index) => listFragment.appendChild(addHtmlCard(index, randomArray)));
+  const listFragment = createListFragment(randomArray);
   pictures.appendChild(listFragment);
 }
-export { addCardOnPage, pictures };
+const createListFragment = (randomArray) => {
+  const listFragment = document.createDocumentFragment();
+  randomArray.forEach((_, index) => listFragment.appendChild(addHtmlCard(index, randomArray)));
+  return listFragment;
+}
+const removeCardsFromPage = () => {
+  document.querySelectorAll('.picture').forEach((element) => {
+    pictures.removeChild(element);
+
+  });
+
+};
+
+export { addCardOnPage, pictures, removeCardsFromPage };
