@@ -27,6 +27,9 @@ const closeModal = (element, body, hidden, open) => {
 }
 
 
+
+
+
 // export { getRandomNumber };
 // export { generateArayWithInfo };
 // export { getRandomElement };
