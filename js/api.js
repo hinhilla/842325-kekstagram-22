@@ -2,7 +2,7 @@
 
 import { processingData } from './processing-data.js'
 
-const URL = 'https://22.javascript.pages.academy/kekstagram/data'
+const URL = 'https://23.javascript.pages.academy/kekstagram/data'
 
 const toJSON = (response) => {
   if (response.ok) {
@@ -24,7 +24,5 @@ const getData = (url) => {
 };
 
 getData(URL);
-
-
 
 
