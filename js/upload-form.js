@@ -9,12 +9,12 @@ const editImageButtonBigger = editImageForm.querySelector('.scale__control--bigg
 const editImageValue = editImageForm.querySelector('.scale__control--value');
 const previewImage = editImageForm.querySelector('.img-upload__preview img');
 const radioListBlock = pageBody.querySelector('.effects__list');
-
+const uploadForm = pageBody.querySelector('.img-upload__input');
+const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
 newImageControl.addEventListener('input', () => {
   openModal(editImageForm, pageBody, HIDDEN_STATE, OPEN_MODAL_STATE);
 });
-
 
 closeEditForm.addEventListener('click', () => {
   closeModal(editImageForm, pageBody, HIDDEN_STATE, OPEN_MODAL_STATE);
@@ -42,5 +42,18 @@ const changeNumberToValueOnClick = (changeNumberTo, min, max, button) => {
 changeNumberToValueOnClick(-25, 25, 100, editImageButtonSmaller);
 changeNumberToValueOnClick(25, 25, 100, editImageButtonBigger);
 
+uploadForm.addEventListener('change', () => {
+  const file = uploadForm.files[0];
+  const fileName = file.name.toLowerCase();
+
+  const matches = FILE_TYPES.some((element) => fileName.endsWith(element));
+  if (matches) {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => previewImage.src = reader.result);
+    reader.readAsDataURL(file);
+
+  }
+
+});
 
 export { radioListBlock, pageBody, previewImage };
