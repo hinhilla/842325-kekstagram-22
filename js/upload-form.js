@@ -16,7 +16,6 @@ newImageControl.addEventListener('input', () => {
   openModal(editImageForm, pageBody, HIDDEN_STATE, OPEN_MODAL_STATE);
 });
 
-
 closeEditForm.addEventListener('click', () => {
   closeModal(editImageForm, pageBody, HIDDEN_STATE, OPEN_MODAL_STATE);
   newImageControl.value = '';
@@ -43,25 +42,18 @@ const changeNumberToValueOnClick = (changeNumberTo, min, max, button) => {
 changeNumberToValueOnClick(-25, 25, 100, editImageButtonSmaller);
 changeNumberToValueOnClick(25, 25, 100, editImageButtonBigger);
 
-
-export { radioListBlock, pageBody, previewImage };
-
-
 uploadForm.addEventListener('change', () => {
   const file = uploadForm.files[0];
   const fileName = file.name.toLowerCase();
 
-  const matches = FILE_TYPES.some((element) => {
-    return fileName.endsWith(element)
-  });
+  const matches = FILE_TYPES.some((element) => fileName.endsWith(element));
   if (matches) {
     const reader = new FileReader();
-    reader.addEventListener('load', () => {
-      previewImage.src = reader.result;
-    })
+    reader.addEventListener('load', () => previewImage.src = reader.result);
     reader.readAsDataURL(file);
 
   }
 
 });
-// previewImage
+
+export { radioListBlock, pageBody, previewImage };
